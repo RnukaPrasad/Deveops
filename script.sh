@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "Hello World from jenkins""
+echo "Hello World from 'git branch' Branch"
