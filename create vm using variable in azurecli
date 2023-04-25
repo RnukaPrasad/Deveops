@@ -1,0 +1,96 @@
+resource "azurerm_resource_group" "rs1" {
+  name     = var.resource_group_name
+  location = var.location
+}
+
+resource "azurerm_virtual_network" "azvnet" {
+  name                = "${var.resource_group_name}-vnet"
+  location            = var.location
+  address_space       = ["10.0.0.0/16"]
+  resource_group_name = azurerm_resource_group.rs1.name
+}
+
+resource "azurerm_subnet" "subnet" {
+  name                 = "${var.resource_group_name}-snet"
+  address_prefixes     = ["10.0.1.0/24"]
+  resource_group_name  = azurerm_resource_group.rs1.name
+  virtual_network_name = azurerm_virtual_network.azvnet.name
+}
+
+resource "azurerm_public_ip" "static" {
+  name                = "${var.resource_group_name}-vm-pip"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rs1.name
+  allocation_method   = "Static"
+}
+resource "azurerm_network_interface" "vm_nic" {
+  name                = "${var.resource_group_name}-vm-nic"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rs1.name
+  ip_configuration {
+    name                          = "primary"
+    subnet_id                     = azurerm_subnet.subnet.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.static.id
+  }
+}
+
+resource "azurerm_linux_virtual_machine" "sm-vm" {
+  name                = var.vm_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  size                = "Standard_F2"
+  admin_username      = var.admin_username
+
+  network_interface_ids = [ azurerm_network_interface.vm_nic.id]
+
+    admin_ssh_key {
+    username   = "demo"
+    public_key = file("/home/rk/.ssh/vmazurekey.pub")
+}
+ os_disk {
+    name                 = join("_", [var.vm_name, "OsDisk"])
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
+  }
+}
+
+
+provider.tf:
+
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "3.51.0"
+    }
+  }
+}
+provider "azurerm" {
+  features {}
+}
+
+
+terraform.tfvars:
+
+resource_group_name = "rp-rg"
+location = "eastus"
+vm_name = "var-vm"
+admin_username = "demo"
+
+variable.tf
+
+variable "resource_group_name" {}
+variable "location" {}
+variable "vm_name" {}
+variable "admin_username" {}
+variable "admin_ssh_key" {}
+
+
