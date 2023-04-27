@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: sboot
+  name: sboot
+spec:
+  replicas: 3
+  serviceName: "sboot"
+  selector:
+    matchLabels:
+      app: sboot
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: sboot
+    spec:
+      containers:
+      - image: 162263/rp:2.0
+        name: sboot
+        ports:
+        - containerPort: 8091
+        resources: {}
