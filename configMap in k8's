@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  cm.properties: |
+    port=8091
+    name=rp
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: test
+  
+  
+  kubectl create cm rp --from-literal=username=rp --from-literal=password=1234 (coomand to create configMap)
