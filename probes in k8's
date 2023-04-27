@@ -1,3 +1,5 @@
+httpGet
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -57,3 +59,11 @@ spec:
             port: 8091
           periodSeconds: 5
           initialDelaySeconds: 10
+
+tcpSocket:
+
+readinessProbe:
+          tcpSocket:
+            port: 8091
+          periodSeconds: 5
+          initialDelaySeconds: 10 
