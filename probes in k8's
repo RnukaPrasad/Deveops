@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: sboot
+  name: sboot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sboot
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: sboot
+    spec:
+      initContainers:
+      - name: init1
+        image: busybox
+        env:
+        - name: UN
+          valueFrom:
+            configMapKeyRef:
+              name: rp
+              key: username
+               - name: PW
+          valueFrom:
+            configMapKeyRef:
+              name: rp
+              key: password      
+        command: ["sh", "-c", "echo $UN $PW"]      
+      - name: init2
+        image: busybox
+        env:
+        - name: PASS
+          valueFrom:
+            secretKeyRef:
+              name: test
+              key: password
+        command: ["sh", "-c", "echo $PASS"]
+      containers:
+      - image: 162263/rp:2.0
+        name: sboot
+        ports:
+        - containerPort: 8091
+        startupProbe:
+          httpGet:
+            path: /env
+            port: 8091
+          periodSeconds: 5
+          initialDelaySeconds: 10   
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8091
+          periodSeconds: 5
+          initialDelaySeconds: 10
