@@ -1,0 +1,43 @@
+kubectl explain <resource>
+		gives details on the resources configuration to be present in the files
+	kubectl create <resource>
+		this is used to create the resources in k8s ( only creates)
+	kubectl get <resource>
+		this is used to get the configuration or resource information
+	kubectl delete <resource>
+		used to delete the resources
+	kubectl describe <resource>
+		gives information about the current state of the resource
+	kubectl edit <resource>
+		edit the configuration of the resource
+	kubectl apply
+apply is a update ( if resource is not there it creates, if resource already created it update the config)
+	kubectl exec <podname> -it <command> - to excute a command
+	kubectl get pods -o wide
+	watch <command>
+	kubectl create ns a3 --dry-run=client -o yaml > ns.yaml
+	kubectl create deploy sboot --image=adikarthik/springboot --port=8080 --dry-run=client -o yaml
+
+Kubectl config view
+Kubectl get replicateset
+Kubectl get deployment                              these are all services commds
+Kubectl get demoset -A
+Kubectl get statefulset -A
+Kubectl get configmap
+Kubectl create deploy <pod_name> --image=”<docker hub username/image_name>” – create and deploy images
+Kubectl create svc <service name> <podname> --tcp=<assign port>:<expose port> --dry-run=client -o yaml > podname.yaml  - create service to particular pods.
+Kubectl apply -f <podname> - apply the yaml.
+Kubectl scale deploy <pod name>  --replicas=1   -It will create replicas
+Kubectl scale sts <pod name>  --replicas=5 : increase the replica
+helm uninstall <deployment name> --namespace <name> : to delete helm 
+kubctl get node -o yaml (display yaml) -o wide (it will display in table with all info)
+kubectl create job <job name> --image=busybox –dry-run=client -o yaml  --date> jobname.yaml
+kubectl create cronjob <job name> --image=busybox –dry-run=client -o yaml  --schedule=”/1 * * *” --date
+kubectl create role test --verb=get,list,watch --resource=pods  - create roles in RBAC
+kubectl create rolebinding test --clusterrole=test --user=rp  - create rolebinding in RBAC
+culsterrole
+	kubectl create clusterrole test --verb=get,list,watch --resource=pods
+culsterrolebinding
+	kubectl create clusterrolerolebinding test --clusterrole=test --user=rp
+  
+  
