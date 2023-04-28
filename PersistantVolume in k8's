@@ -1,0 +1,33 @@
+Create PersistantVolume
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vol
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+    
+    
+Create PersistantVolumeClaim
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test
+spec:
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  
+  
+  
+  NOTE:  Make in PV and PVC both stoarge will same or below (in persistantvolume) thenit will bound other wise it will not.
