@@ -1,0 +1,17 @@
+#!/bin/bash
+#Author - Renukaprasad B
+#Date - 21/05/2023
+#Description - Build and deploy a Java project to web-server
+
+PROJECT_PATH=~/shell/Amazon/Amazon
+TOMCAT_PATH=~/shell
+
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.tar.gz -P $TOMCAT_PATH
+tar -xf $TOMCAT_PATH/apache-tomcat-9.0.75.tar.gz -C $TOMCAT_PATH
+
+sed -i s/8080/8090/g $TOMCAT_PATH/apache-tomcat-9.0.75/conf/server.xml
+
+mvn clean package -f $PROJECT_PATH/pom.xml
+cp $PROJECT_PATH/Amazon-Web/target/*.war $TOMCAT_PATH/apache-tomcat-9.0.75/webapps
+
+sh $TOMCAT_PATH/apache-tomcat-9.0.75/bin/catalina.sh run
