@@ -1,0 +1,22 @@
+FROM maven:3.6.0-jdk-11-slim
+MAINTAINER Renukaprasad
+LABEL "projectImage"="Amazon"
+
+RUN mkdir tomcat_dir
+RUN mkdir maven_dir
+
+WORKDIR /maven_dir
+COPY Amazon/Amazon/ .
+RUN ls
+RUN mvn clean package -DskipTests
+
+WORKDIR /tomcat_dir
+ADD apache-tomcat-9.0.75.tar.gz .
+#RUN tar -xf apache-tomcat-9.0.75.tar.gz
+
+WORKDIR /maven_dir/Amazon-Web/target
+RUN cp -r . /tomcat_dir/apache-tomcat-9.0.75/webapps
+
+WORKDIR /tomcat_dir/apache-tomcat-9.0.75
+EXPOSE 8080
+CMD ["sh", "bin/catalina.sh", "run"]
