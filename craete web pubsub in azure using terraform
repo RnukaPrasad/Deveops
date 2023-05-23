@@ -1,0 +1,43 @@
+cat provider.tf
+
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "3.57.0"
+    }
+  }
+}
+
+provider "azurerm" {
+
+features {}
+}
+
+cat main.tf
+
+data "azurerm_resource_group" "rsg" {
+  name = "Rp"
+}
+
+resource "azurerm_web_pubsub" "ps1" {
+  name                = "RP-webpubsub"
+  location            = data.azurerm_resource_group.rsg.location
+  resource_group_name = data.azurerm_resource_group.rsg.name
+
+  sku      = "Standard_S1"
+  capacity = 1
+
+  public_network_access_enabled = false
+
+  live_trace {
+    enabled                   = true
+    messaging_logs_enabled    = true
+    connectivity_logs_enabled = false
+  }
+}
+
+
+need to login toii azure cli az login
+az set subscripition
+set principle
