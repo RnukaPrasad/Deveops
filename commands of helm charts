@@ -1,0 +1,11 @@
+helm init : initialize or intsall Tiller.
+helm create <chart> : create chart.
+helm repo list:  list repository
+helm list --all: list all releases
+helm install <chart>: deploy a chart.
+helm inspect <chart>: Get information about a chart.
+helm status <release>: Get the status of a release
+helm get <release> : get details about a release.
+helm upgrade <release> <chart>: Upgrade a release
+helm delete <release>: Delete a release.
+helm rollback <release> <revision>: Roll back a release
