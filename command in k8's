@@ -39,5 +39,6 @@ culsterrole
 	kubectl create clusterrole test --verb=get,list,watch --resource=pods
 culsterrolebinding
 	kubectl create clusterrolerolebinding test --clusterrole=test --user=rp
-  
+
+kubectl config set-context --current --namespace=<namespace name> - swtich to particular namespace
   
