@@ -1,0 +1,76 @@
+name: app-yib-DB-deployment
+
+on:
+   workflow_dispatch:  # Manual trigger
+   push:
+    branches: main
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+ 
+      # Set up PostgreSQL client
+      - name: Set up PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+ 
+      # Set up environment for stage
+      - name: Set up environment for stage
+        run: |
+          echo "Setting up environment for stage"
+          # Add your environment setup commands here
+       
+      # Run stage script
+      - name: Run stage script
+        run: |
+          echo "Running stage script"
+          chmod +x ./DB_Deployment/dev_DB_deployment.sh
+          bash ./DB_Deployment/dev_DB_deployment.sh
+
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+ 
+      # Set up PostgreSQL client
+      - name: Set up PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+ 
+      # Set up environment for stage
+      - name: Set up environment for stage
+        run: |
+          echo "Setting up environment for stage"
+          # Add your environment setup commands here
+       
+      # Run stage script
+      - name: Run stage script
+        run: |
+          echo "Running stage script"
+          chmod +x ./DB_Deployment/qa_DB_deployment.sh
+          bash ./DB_Deployment/qa_DB_deployment.sh
+
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+ 
+      # Set up PostgreSQL client
+      - name: Set up PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+ 
+      # Set up environment for stage
+      - name: Set up environment for stage
+        run: |
+          echo "Setting up environment for stage"
+          # Add your environment setup commands here
+       
+      # Run stage script
+      - name: Run stage script
+        run: |
+          echo "Running stage script"
+          chmod +x ./DB_Deployment/stage_DB_deployment.sh
+          bash ./DB_Deployment/stage_DB_deployment.sh
