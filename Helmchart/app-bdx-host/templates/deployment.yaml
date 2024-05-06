@@ -1,0 +1,147 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{.Values.namespace}}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: {{ .Chart.Name }}
+        appid: {{ .Values.appid }}
+        tenantname: {{ .Values.tenantname }}
+        disable-opa-injection : "true"
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": {{ .Values.nodeSelector.os }}
+      tolerations:
+      - effect: NoSchedule
+        key: node
+        operator: Equal
+        value: apps
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+          - name: apiBaseUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: apiBaseUrl
+          - name: workspaceApiBaseUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: workspaceApiBaseUrl
+          - name: diApiBaseUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: diApiBaseUrl
+          - name: uspApiBaseUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: uspApiBaseUrl
+          - name: assetsApiBaseUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: assetsApiBaseUrl
+          - name: reportsApiBaseUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: reportsApiBaseUrl
+          - name: manifestUspUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: manifestUspUrl
+          - name: manifestDataIntegrationUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: manifestDataIntegrationUrl
+          - name: manifestAssetsUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: manifestAssetsUrl
+          - name: manifestReportsUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: manifestReportsUrl
+          - name: tokenEndpoint
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: tokenEndpoint
+          - name: revocationEndpoint
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: revocationEndpoint
+          - name: issuer
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: issuer
+          - name: redirectUri
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: redirectUri
+          - name: clientId
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: clientId
+          - name: logoutUrl
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: logoutUrl
+          - name: usp_dt_nginx
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: usp_dt_nginx
+          - name: data_integration_nginx
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: data_integration_nginx
+          - name: assets_nginx
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: assets_nginx
+          - name: reports_nginx
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: reports_nginx
+          - name: index_env
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Chart.Name }}
+                key: index_env
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          resources:
+            limits:
+              memory: {{.Values.resource.limits.memory}}
+              cpu: {{.Values.resource.limits.cpu}}
+            requests:
+              memory: {{.Values.resource.requests.memory}}
+              cpu: {{.Values.resource.requests.cpu}}
