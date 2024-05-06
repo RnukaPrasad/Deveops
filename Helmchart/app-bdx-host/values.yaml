@@ -1,0 +1,49 @@
+# Default values for app-bdx-host.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+namespace: c1d7ddfe-7169-4ed0-b21e-6f12da00a36c
+appid: yib
+tenantname: yibpoc
+nodeSelector:
+  os: linux
+imagePullSecrets: yib-acr-yibpoc-dev
+image:
+  repository: ydxregistry.azurecr.io/apps-yib/apps-yib-app-host
+  tag: 1.1.307
+ports:
+  containerPort: 80
+resource:
+  limits:
+    memory: 500Mi
+    cpu: "0.5"
+  requests:
+    memory: 100Mi
+    cpu: "0.1"
+service:
+  name: app-bdx-host
+  type: ClusterIP
+  port: 80
+  targetport: 80
+env:
+  apiBaseUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-workspaceservices/yibpoc/api/
+  workspaceApiBaseUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-workspaceservices/yibpoc/
+  diApiBaseUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-data-integration-services/yibpoc/api/
+  uspApiBaseUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-usp-dt-services/yibpoc/api/
+  assetsApiBaseUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-workspaceservices/yibpoc/
+  reportsApiBaseUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-reportingservices/yibpoc/api/
+  manifestUspUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-usp-dt/yibpoc
+  manifestDataIntegrationUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-data-integration/yibpoc
+  manifestAssetsUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-assets/yibpoc
+  manifestReportsUrl: https://cloud.appdev.apps.yokogawa.build/app-bdx-reports/yibpoc
+  tokenEndpoint: https://api.appdev.apps.yokogawa.build/idpt-authz/auth/realms/YIBPOC/protocol/openid-connect/token
+  revocationEndpoint: https://api.appdev.apps.yokogawa.build/idpt-authz/auth/realms/YIBPOC/protocol/openid-connect/revoke
+  issuer: https://api.appdev.apps.yokogawa.build/idpt-authz/auth/realms/YIBPOC
+  redirectUri: https://cloud.appdev.apps.yokogawa.build/app-bdx-host/yibpoc/callback
+  clientId: yibsuite-ui
+  logoutUrl: https://sso-static.appdev.apps.yokogawa.build/oidcLogout.html
+  usp_dt_nginx: https://cloud.appdev.apps.yokogawa.build/app-bdx-usp-dt/yibpoc/assets/usp-dt/
+  data_integration_nginx: https://cloud.appdev.apps.yokogawa.build/app-bdx-data-integration/yibpoc/assets/data-integration/
+  assets_nginx: https://cloud.appdev.apps.yokogawa.build/app-bdx-assets/yibpoc/assets/assets/
+  reports_nginx: https://cloud.appdev.apps.yokogawa.build/app-bdx-reports/yibpoc/assets/report/
+  index_env: app-bdx-host/yibpoc/
