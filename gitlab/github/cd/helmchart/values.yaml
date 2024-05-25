@@ -1,0 +1,27 @@
+# Default values for app-bdx-assets.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+namespace: c1d7ddfe-7169-4ed0-b21e-6f12da00a36c
+appid: yib
+tenantname: yibpoc
+nodeSelector:
+  os: linux
+imagePullSecrets: yib-acr-yibpoc-dev
+image:
+  repository: ydxregistry.azurecr.io/apps-yib/apps-yib-assets
+  tag: 1.1.428
+ports:
+  containerPort: 80
+resource:
+  limits:
+    memory: 500Mi
+    cpu: "0.5"
+  requests:
+    memory: 100Mi
+    cpu: "0.1"
+service:
+  name: app-bdx-assets
+  type: ClusterIP
+  port: 80
+  targetport: 80
