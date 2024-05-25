@@ -1,0 +1,24 @@
+docker_scout:
+  stage: docker_scout
+  image:
+    name: docker:latest
+  services:
+    - docker:dind
+  script:
+    # Ensure Docker daemon is running
+    - docker info
+    # Authenticate with Azure Container Registry
+    - docker login -u $ACR_REGISTRY_USER -p $ACR_REGISTRY_PASSWORD $ACR_REGISTRY
+    # Pull the image to be scanned
+    - docker pull $ACR_REGISTRY/$ACR_REGISTRY_USER/apps-yib-assets:$DOCKER_IMAGE_TAG
+    # Scan the pulled image
+    - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image $ACR_REGISTRY/$ACR_REGISTRY_USER/apps-yib-assets:$DOCKER_IMAGE_TAG
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: on_success
+    - if: '$CI_COMMIT_TAG'
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: on_success
