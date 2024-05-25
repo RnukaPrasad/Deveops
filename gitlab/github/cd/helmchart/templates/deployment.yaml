@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{.Values.namespace}}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: {{ .Chart.Name }}
+        appid: {{ .Values.appid }}
+        tenantname: {{ .Values.tenantname }}
+        disable-opa-injection : "true"
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": {{ .Values.nodeSelector.os }}
+      tolerations:
+      - effect: NoSchedule
+        key: node
+        operator: Equal
+        value: apps
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          resources:
+            limits:
+              memory: {{.Values.resource.limits.memory}}
+              cpu: {{.Values.resource.limits.cpu}}
+            requests:
+              memory: {{.Values.resource.requests.memory}}
+              cpu: {{.Values.resource.requests.cpu}}
