@@ -1,0 +1,20 @@
+build:
+  stage: build
+  image:
+    name: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u $ACR_REGISTRY_USER -p $ACR_REGISTRY_PASSWORD $ACR_REGISTRY
+    - docker build -t $ACR_REGISTRY/$ACR_REGISTRY_USER/apps-yib-assets:$DOCKER_IMAGE_TAG .
+    - docker push $ACR_REGISTRY/$ACR_REGISTRY_USER/apps-yib-assets:$DOCKER_IMAGE_TAG
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: on_success
+    - if: '$CI_COMMIT_TAG'
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: on_success
+
