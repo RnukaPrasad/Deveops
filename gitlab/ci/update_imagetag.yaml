@@ -1,0 +1,17 @@
+updating_imagetag:
+  stage: updating_imagetag
+  image:
+    name: ruby:3.1
+  before_script:
+    - git config --global user.email "Renukaprasad.basavraj@yokogawa.com"
+    - git config --global user.name "Renukaprasadbasavraj"
+  script:
+    - chmod +x ci/tagging.sh
+    - bash ci/tagging.sh
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: on_success
+
+
