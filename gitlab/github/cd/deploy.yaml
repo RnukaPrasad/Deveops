@@ -1,0 +1,19 @@
+name: app bdx assets (CI/CD)
+
+on:
+  workflow_dispatch:  # Manual trigger
+  push:
+    branches: [master]
+    paths:
+      - 'scripts/bdx_helmchart/app-bdx-assets/values.yaml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Deploy
+      uses: WyriHaximus/github-action-helm3@v2
+      with:
+        exec: helm upgrade app-bdx-assets ./scripts/bdx_helmchart/app-bdx-assets  --install --wait --atomic --namespace=c1d7ddfe-7169-4ed0-b21e-6f12da00a36c --values=./scripts/bdx_helmchart/app-bdx-assets/values.yaml
+        kubeconfig: '${{ secrets.KUBE_CONFIG_APP_DEV }}'
