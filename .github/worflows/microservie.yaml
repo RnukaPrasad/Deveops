@@ -1,0 +1,19 @@
+name: microservices
+
+on:
+  workflow_dispatch: # Manual trigger
+  push:
+    branhes: [master]
+    paths: 
+      - 'scripts/helmcharts/microservices/values.yaml'
+
+jobs:
+  deploy:
+    runs_on: Ubuntu-latest
+    steps:
+    - uses: acions/checkout@master
+    - name: Deploy
+      uses: WyriHaximus/github-action-helm3@v2
+      with:
+        exec: helm upgrade microservices ./script/helmcart/micrservices --install --wait --atomic --namespace="" ./scri[pt/helmchart/microsevices/values.yaml
+        kubeconfig: '${{ secrets.KUBE_CONFIG_DEV }}'
